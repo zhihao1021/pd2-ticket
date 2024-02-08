@@ -1,0 +1,78 @@
+@import url("https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@200;400&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200");
+
+body {
+    margin: 0;
+    font-family:
+        "Noto Sans TC",
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        "Roboto",
+        "Oxygen",
+        "Ubuntu",
+        "Cantarell",
+        "Fira Sans",
+        "Droid Sans",
+        "Helvetica Neue",
+        sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+button {
+    background: none;
+    outline: none;
+    color: inherit;
+    border: none;
+    font-size: inherit;
+    cursor: pointer;
+}
+
+.ms-o {
+    font-family: "Material Symbols Outlined";
+    user-select: none;
+    font-variation-settings:
+        "FILL" 1,
+        "wght" 400,
+        "GRAD" 0,
+        "opsz" 24;
+}
+
+:root {
+    font-size: min(2vh, 5vw);
+}
+// @media (max-aspect-ratio: 2/3) {   
+//     :root {
+//         font-size: 6vw;
+//     }
+// }
+
+::-webkit-scrollbar {
+    width: 0.35rem;
+    height: 0.35rem;
+}
+
+::-webkit-scrollbar-track {
+    background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+    background-color: #8888;
+    transition: background-color 0.5s;
+    border-radius: 0.175rem;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background-color: #555;
+}
+
+pre {
+    font-family: Consolas, source-code-pro, Menlo, Monaco, "Courier New", monospace !important;
+    code {
+        font-family: inherit;
+        * {
+            font-family: inherit;
+        }
+    }
+}

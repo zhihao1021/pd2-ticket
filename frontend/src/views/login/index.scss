@@ -1,0 +1,33 @@
+#loginPage {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    .box {
+        display: flex;
+        flex-direction: column;
+        gap: 1rem;
+        width: 24rem;
+        max-width: calc(90vw - 2rem);
+        padding: 1.5rem;
+        border-radius: 1rem;
+        color: var(--box-color);
+        background-color: var(--box-bg-color);
+        text-align: center;
+        a {
+            cursor: pointer;
+            background-color: #5865F2;
+            padding: 1.25rem;
+            border-radius: 0.8rem;
+            line-height: 0;
+            font-size: 2rem;
+        }
+        .errorBox {
+            font-size: 1rem;
+            text-align: left;
+            padding: 0.6em 1em;
+            border-radius: 0.5em;
+            background-color: var(--error-bg-color);
+        }
+    }
+}

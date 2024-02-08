@@ -1,0 +1,150 @@
+#sideBar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: calc((15rem - 40vw) * 100);
+    min-width: min(15rem, 100vw);
+    max-width: 100vw;
+    user-select: none;
+    isolation: isolate;
+    .switchButton {
+        position: absolute;
+        top: 0.8rem;
+        left: 0.8rem;
+        height: 1.6rem;
+        width: 1.6rem;
+        border-radius: 50%;
+        overflow: hidden;
+        z-index: 10;
+    }
+    .switchButton::before,
+    .switchButton::after {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        line-height: 1.6rem;
+        font-size: 1.5rem;
+        text-align: center;
+        transition: transform 0.3s;
+        font-family: "Material Symbols Outlined";
+    }
+    .switchButton::before {
+        content: "menu";
+    }
+    .switchButton::after {
+        content: "close";
+    }
+    .content {
+        position: absolute;
+        top: 0;
+        left: 0;
+        display: flex;
+        flex-direction: column;
+        padding-top: 3.2rem;
+        height: calc(100% - 3.2rem);
+        width: calc(100% - 0.3 * min(1rem, 100vw - 100%));
+        max-width: 100%;
+        background-color: var(--side-bar-bg-color);
+        transition: left 0.5s;
+        box-shadow: -0.3rem 0 0.3rem 0.3rem #000;
+        .logoutButton {
+            font-size: 0.85rem;
+            position: absolute;
+            display: flex;
+            align-items: center;
+            gap: 0.5em;
+            bottom: 0.8rem;
+            right: 1rem;
+            padding: 0.3em 0.8em;
+            color: var(--disable-color);
+            border: 0.1em solid var(--disable-color);
+            border-radius: 0.3em;
+            transition: border-color 0.3s, color 0.3s;
+        }
+        .logoutButton:hover {
+            color: var(--error-color);
+            border-color: var(--error-color);
+        }
+        .userInfo {
+            display: flex;
+            padding: 0 0.5rem 0.5rem 0.5rem;
+            align-items: center;
+            gap: 0.8rem;
+            border-bottom: 0.01rem solid var(--sec-color);
+            img {
+                height: 3.5rem;
+                width: 3,5rem;
+                object-fit: contain;
+                border-radius: 50%;
+            }
+            .text {
+                overflow: hidden;
+                .welcome {
+                    font-size: 0.8rem;
+                    color: var(--sec-color);
+                }
+                .username {
+                    font-size: 1.2rem;
+                    word-break: keep-all;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    overflow: hidden;
+                }
+            }
+        }
+        .link {
+            padding: 0.5rem;
+            white-space: pre;
+            color: var(--sec-color);
+            text-decoration: none;
+            font-weight: 100;
+            border: 0.01rem solid var(--sec-color);
+            border-left: none;
+            border-right: none;
+            transition: color 0.3s, background-color 0.3s;
+        }
+        .link:hover {
+            color: var(--color);
+            background-color: var(--side-bar-sec-bg-color);
+        }
+        .link[data-select=true] {
+            color: var(--select-color);
+        }
+        .versionInfo {
+            padding: 0.5rem;
+            font-size: 0.8rem;
+            color: var(--sec-color);
+            border-top: 0.01rem solid var(--sec-color);
+            > div {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                gap: 1em;
+                a {
+                    color: inherit;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                }
+            }
+        }
+    }
+}
+
+#sideBar[data-open=true] {
+    .switchButton::before {
+        transform: scale(0) rotate(90deg);
+    }
+}
+
+#sideBar[data-open=false] {
+    .switchButton::after {
+        transform: scale(0) rotate(-90deg);
+    }
+    .content {
+        left: -100%;
+    }
+}

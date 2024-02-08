@@ -1,0 +1,27 @@
+@import url(./config/color.scss);
+
+#app {
+    height: 100vh;
+    width: 100vw;
+    color: var(--color);
+    background-color: var(--bg-color);
+    .page {
+        height: 100%;
+        width: 100%;
+    }
+    h1 {
+        margin: 0;
+        font-size: 2.75rem;
+    }
+
+    .ani-btn {
+        box-shadow: 0.1em 0.1em 0.2em -0.1em #000;
+        transform: translateY(0);
+        --ani-transition: box-shadow 0.3s, transform 0.3s;
+        transition: var(--ani-transition);
+    }
+    .ani-btn:active {
+        box-shadow: 0em 0em 0.1em -0.1em #000;
+        transform: translateY(0.1em);
+    }
+}
