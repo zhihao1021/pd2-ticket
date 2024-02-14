@@ -1,0 +1,61 @@
+#listPage {
+    .editBlock {
+        position: fixed;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background-color: var(--fixed-bg-color);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        user-select: none;
+        transition: opacity 0.5s;
+        .box {
+            color: var(--box-color);
+            background-color: var(--box-bg-color);
+            padding: 1.5rem;
+            border-radius: 1rem;
+            display: flex;
+            flex-direction: column;
+            gap: 0.55rem;
+            width: 20rem;
+            max-width: calc(90vw - 3rem);
+            isolation: isolate;
+            transition: transform 0.5s;
+            .column {
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                flex-wrap: wrap;
+                .dropDownList {
+                    background-color: var(--box-bg-color);
+                }
+            }
+            .buttonBar {
+                display: flex;
+                align-items: center;
+                justify-content: flex-end;
+                margin-top: 1rem;
+                gap: 0.5rem;
+                button {
+                    padding: 0.25rem 0.8rem;
+                    border-radius: 0.25rem;
+                }
+                button.save {
+                    background-color: var(--color-1);
+                }
+                button.cancel {
+                    background-color: var(--error-color);
+                }
+            }
+        }
+    }
+    .editBlock[data-show=false] {
+        opacity: 0%;
+        pointer-events: none;
+        .box {
+            transform: translateY(-20vh);
+        }
+    }
+}

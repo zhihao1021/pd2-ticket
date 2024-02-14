@@ -3,20 +3,22 @@
     top: 0;
     left: 0;
     height: 100%;
-    width: calc((15rem - 40vw) * 100);
+    width: calc((15rem - 40vw) * 10000);
     min-width: min(15rem, 100vw);
     max-width: 100vw;
     user-select: none;
     isolation: isolate;
+    pointer-events: none;
     .switchButton {
         position: absolute;
         top: 0.8rem;
-        left: 0.8rem;
+        left: calc(0.8rem + max(min(100vw, 10000 * (15rem - 40vw)) - 3.2rem, 0rem));
         height: 1.6rem;
         width: 1.6rem;
         border-radius: 50%;
         overflow: hidden;
-        z-index: 10;
+        z-index: 1;
+        pointer-events: initial;
     }
     .switchButton::before,
     .switchButton::after {
@@ -50,6 +52,7 @@
         background-color: var(--side-bar-bg-color);
         transition: left 0.5s;
         box-shadow: -0.3rem 0 0.3rem 0.3rem #000;
+        pointer-events: initial;
         .logoutButton {
             font-size: 0.85rem;
             position: absolute;
@@ -62,7 +65,9 @@
             color: var(--disable-color);
             border: 0.1em solid var(--disable-color);
             border-radius: 0.3em;
-            transition: border-color 0.3s, color 0.3s;
+            transition:
+                border-color 0.3s,
+                color 0.3s;
         }
         .logoutButton:hover {
             color: var(--error-color);
@@ -76,7 +81,7 @@
             border-bottom: 0.01rem solid var(--sec-color);
             img {
                 height: 3.5rem;
-                width: 3,5rem;
+                width: 3, 5rem;
                 object-fit: contain;
                 border-radius: 50%;
             }
@@ -104,13 +109,15 @@
             border: 0.01rem solid var(--sec-color);
             border-left: none;
             border-right: none;
-            transition: color 0.3s, background-color 0.3s;
+            transition:
+                color 0.3s,
+                background-color 0.3s;
         }
         .link:hover {
             color: var(--color);
             background-color: var(--side-bar-sec-bg-color);
         }
-        .link[data-select=true] {
+        .link[data-select="true"] {
             color: var(--select-color);
         }
         .versionInfo {
@@ -134,13 +141,13 @@
     }
 }
 
-#sideBar[data-open=true] {
+#sideBar[data-open="true"] {
     .switchButton::before {
         transform: scale(0) rotate(90deg);
     }
 }
 
-#sideBar[data-open=false] {
+#sideBar[data-open="false"] {
     .switchButton::after {
         transform: scale(0) rotate(-90deg);
     }

@@ -1,5 +1,5 @@
 from aiofiles import open as async_open
-from fastapi import APIRouter, HTTPException, status, UploadFile
+from fastapi import APIRouter, Form, HTTPException, Response, status, UploadFile
 from fastapi.responses import StreamingResponse
 from orjson import dumps, loads, OPT_INDENT_2
 
@@ -17,6 +17,7 @@ from config import KEY
 from schemas.ticket import Ticket, TicketUpdate
 
 from ..oauth import UserDepends
+from ..schemas import HTTPError
 
 router = APIRouter(
     prefix="/ticket",
@@ -28,13 +29,15 @@ if not isdir(TICKET_DIRECTORY):
     makedirs(TICKET_DIRECTORY)
 
 
-def generate_ticket_id(user_id: int) -> str:
-    string = f"{KEY}-{datetime.utcnow().isoformat()}-{user_id}"
-    return sha1(string.encode("utf-8") + urandom(16)).hexdigest()
+def generate_ticket_id(user_id: str) -> str:
+    random_hash = sha1(
+        f"{KEY}-{user_id}".encode("utf-8") + urandom(16)
+    ).hexdigest()
+    return f"{datetime.now().isoformat()}H{random_hash}".replace(":", "_")
 
 
-def read_user_ticket_list(user_id: int) -> list[str]:
-    target_directory = join(TICKET_DIRECTORY, str(user_id))
+def read_user_ticket_list(user_id: str) -> list[str]:
+    target_directory = join(TICKET_DIRECTORY, user_id)
     if not isdir(target_directory):
         return []
     return listdir(target_directory)
@@ -43,7 +46,7 @@ def read_user_ticket_list(user_id: int) -> list[str]:
 @router.get(
     path="",
     status_code=status.HTTP_200_OK,
-    description="Get your own ticket list"
+    description="Get your own ticket list",
 )
 def get_self_list(user: UserDepends) -> list[str]:
     return read_user_ticket_list(user_id=user.id)
@@ -57,14 +60,14 @@ def get_self_list(user: UserDepends) -> list[str]:
 async def upload_files(
     user: UserDepends,
     files: list[UploadFile],
-    public: bool = False,
+    public: bool = Form(False),
 ) -> str:
     # Check if file path is legal
     def check_filename(file: UploadFile) -> bool:
         filename = file.filename
         if filename is None:
             return False
-        for c in ":*?\"<>|":
+        for c in ":*?\"<>|~":
             if c in filename:
                 return False
         return True
@@ -93,11 +96,12 @@ async def upload_files(
     async def write_to_file(file: UploadFile):
         if file.filename is None:
             return
-        target_path = Path(join(save_directory, file.filename))
+        filename = file.filename.replace("\\", "/")
+        target_path = Path(join(save_directory, filename))
         try:
             async with async_open(target_path, "wb") as open_file:
                 await open_file.write(await file.read())
-            ticket_data.files.append(file.filename.replace("\\", "/"))
+            ticket_data.files.append(filename)
         except:
             pass
 
@@ -121,6 +125,7 @@ async def upload_files(
     await gather(*tasks)
 
     # Save ticket info to file
+    ticket_data.files = list(set(ticket_data.files))
     async with async_open(join(ticket_directory, "data.json"), "wb") as data_file:
         await data_file.write(dumps(
             ticket_data.model_dump(),
@@ -132,12 +137,12 @@ async def upload_files(
 
 @router.put(
     path="",
-    status_code=status.HTTP_204_NO_CONTENT,
+    status_code=status.HTTP_200_OK,
+    response_model=Ticket,
     description="Modify your ticket by ticket ID"
 )
 async def modify_ticket(user: UserDepends, ticket_id: str, data: TicketUpdate):
-    data_file_path = join(TICKET_DIRECTORY, str(
-        user.id), ticket_id, "data.json")
+    data_file_path = join(TICKET_DIRECTORY, user.id, ticket_id, "data.json")
     if not isfile(data_file_path):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -161,6 +166,8 @@ async def modify_ticket(user: UserDepends, ticket_id: str, data: TicketUpdate):
                 ticket_data.model_dump(),
                 option=OPT_INDENT_2
             ))
+
+        return ticket_data
     except:
         raise HTTPException(
             status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
@@ -174,7 +181,7 @@ async def modify_ticket(user: UserDepends, ticket_id: str, data: TicketUpdate):
     description="Delete your ticket by ticket ID"
 )
 async def delete_ticket(user: UserDepends, ticket_id: str):
-    target_directory = join(TICKET_DIRECTORY, str(user.id), ticket_id)
+    target_directory = join(TICKET_DIRECTORY, user.id, ticket_id)
     if not isdir(target_directory):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -195,13 +202,13 @@ async def delete_ticket(user: UserDepends, ticket_id: str):
     description="Get user ticket list by user ID, use @me ref yourself"
 )
 def get_user_list(user: UserDepends, user_id: Union[int, Literal["@me"]]) -> list[str]:
-    if user_id != "@me" and not user.is_admin:
+    user_id = user.id if user_id == "@me" else str(user_id)
+    if user_id != user.id and not user.is_admin:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Permission denied"
         )
-    user_id = user.id if user_id == "@me" else user_id
-    return read_user_ticket_list(user_id=user.id)
+    return read_user_ticket_list(user_id=user_id)
 
 
 @router.get(
@@ -215,8 +222,8 @@ async def get_user_ticket(
     user_id: Union[int, Literal["@me"]],
     ticket_id: str,
 ) -> Ticket:
-    user_id = user.id if user_id == "@me" else user_id
-    target_directory = join(TICKET_DIRECTORY, str(user_id), ticket_id)
+    user_id = user.id if user_id == "@me" else str(user_id)
+    target_directory = join(TICKET_DIRECTORY, user_id, ticket_id)
     data_file_file = join(target_directory, "data.json")
     if not isfile(data_file_file):
         raise HTTPException(
@@ -242,16 +249,17 @@ async def get_user_ticket(
 @router.get(
     path="/{user_id}/{ticket_id}/file",
     status_code=status.HTTP_200_OK,
-    description="Get user ticket by user ID and ticket ID, use @me ref yourself"
+    description="Get user ticket by user ID and ticket ID, use @me ref yourself",
 )
 async def get_user_ticket(
     user: UserDepends,
     user_id: Union[int, Literal["@me"]],
     ticket_id: str,
-    filename: str
+    filename: str,
+    response: Response
 ) -> str:
-    user_id = user.id if user_id == "@me" else user_id
-    target_directory = join(TICKET_DIRECTORY, str(user_id), ticket_id)
+    user_id = user.id if user_id == "@me" else str(user_id)
+    target_directory = join(TICKET_DIRECTORY, user_id, ticket_id)
     data_file_file = join(target_directory, "data.json")
     if not isfile(data_file_file):
         raise HTTPException(
@@ -288,6 +296,8 @@ async def get_user_ticket(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="File is not text file"
         )
+    
+    response.headers["Cache-Control"] = "max-age=600"
     return context
 
 
@@ -300,10 +310,11 @@ async def get_user_ticket(
     user: UserDepends,
     user_id: Union[int, Literal["@me"]],
     ticket_id: str,
+    response: Response,
     # filename: Optional[str] = None
 ):
-    user_id = user.id if user_id == "@me" else user_id
-    target_directory = join(TICKET_DIRECTORY, str(user_id), ticket_id)
+    user_id = user.id if user_id == "@me" else str(user_id)
+    target_directory = join(TICKET_DIRECTORY, user_id, ticket_id)
     data_file_file = join(target_directory, "data.json")
     if not isfile(data_file_file):
         raise HTTPException(
@@ -340,4 +351,6 @@ async def get_user_ticket(
     async with async_open(zip_path, "rb") as zip_file:
         zip_io = BytesIO(await zip_file.read())
     remove(zip_path)
+
+    response.headers["Cache-Control"] = "max-age=600"
     return StreamingResponse(zip_io)

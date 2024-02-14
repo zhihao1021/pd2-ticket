@@ -1,0 +1,54 @@
+.smallLoading {
+    display: flex;
+    align-items: center;
+    user-select: none;
+    pointer-events: none;
+    svg {
+        max-height: 100%;
+        max-width: 100%;
+        text {
+            fill: var(--color);
+            font-weight: 100;
+            animation-name: loadingText;
+            animation-duration: 3s;
+            animation-iteration-count: infinite;
+        }
+        line {
+            border-radius: 100vmax;
+            margin: 0;
+            stroke: var(--color);
+            stroke-width: 1;
+            stroke-linecap: round;
+            stroke-dasharray: 40 70;
+            stroke-dashoffset: 40;
+            animation-name: loadingLine;
+            animation-duration: 3s;
+            animation-delay: 1.5s;
+            animation-iteration-count: infinite;
+        }
+    }
+}
+
+@keyframes loadingText {
+    0% {
+        opacity: 0%;
+    }
+    45% {
+        opacity: 100%;
+    }
+    55% {
+        opacity: 100%;
+    }
+    100% {
+        opacity: 0%;
+    }
+}
+
+@keyframes loadingLine {
+    0% {
+        stroke-dashoffset: 40;
+    }
+    100% {
+        stroke-dashoffset: -70;
+    }
+}

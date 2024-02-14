@@ -10,10 +10,10 @@ import {
     useSearchParams
 } from "react-router-dom";
 
-import FastAPIError from "../../schemas/error";
-import JWT from "../../schemas/oauth";
+import FastAPIError from "schemas/error";
+import JWT from "schemas/oauth";
 
-import functionContext from "../../context/function";
+import functionContext from "context/function";
 
 import "./index.scss";
 
@@ -49,7 +49,7 @@ export default function LoginPage(): ReactElement {
             window.localStorage.setItem("access_token", data.access_token);
             window.localStorage.setItem("token_type", data.token_type);
 
-            setNavigate("/")
+            setNavigate("/last")
         }).catch((error: AxiosError) => {
             // Authorize failed, show error message
             if (error.response) {

@@ -1,0 +1,76 @@
+#popUpMessage {
+    position: fixed;
+    top: 0;
+    right: 0;
+    height: calc(100% - 1rem);
+    width: calc((15rem - 40vw) * 10000 - 1rem);
+    min-width: min(15rem, 100vw);
+    max-width: calc(100vw - 1rem);
+    padding: 0.5rem;
+    display: flex;
+    gap: 1rem;
+    flex-direction: column;
+    pointer-events: none;
+    opacity: 80%;
+    .box {
+        position: relative;
+        width: calc(100% - 1.6rem);
+        height: min-content;
+        padding: 0.5rem 0.8rem;
+        color: var(--color);
+        background-color: var(--tbg);
+        animation-name: messageBox;
+        animation-duration: calc(var(--timeout) * 1s);
+        animation-fill-mode: forwards;
+        border-radius: 0.8rem;
+        overflow: hidden;
+    }
+    .box[data-level=INFO] {
+        --tbg: var(--info-bg-color);
+    }
+    .box[data-level=WARN] {
+        --tbg: var(--warning-bg-color);
+    }
+    .box[data-level=ERROR] {
+        --tbg: var(--error-bg-color);
+    }
+    .box::after {
+        content: "";
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        height: 0.2rem;
+        width: 100%;
+        background-color: var(--tbg);
+        filter: brightness(0.75);
+        animation-name: messageBoxProcess;
+        animation-duration: calc(var(--timeout) * 1s);
+        animation-fill-mode: forwards;
+    }
+}
+
+@keyframes messageBox {
+    0% {
+        opacity: 0%;
+        transform: translateY(3rem);
+    }
+    15% {
+        opacity: 100%;
+        transform: translateY(0);
+    }
+    85% {
+        transform: translateY(0);
+    }
+    100% {
+        transform: translateX(calc(100% + 0.5rem));
+    }
+}
+
+@keyframes messageBoxProcess {
+    10% {
+        width: 100%;
+    }
+    100% {
+        width: 0%;
+    }
+}

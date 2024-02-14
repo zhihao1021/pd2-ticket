@@ -13,7 +13,7 @@ from .routers import (
 app = FastAPI(
     title="PD2 Ticket",
     description="System for student display code to TA.",
-    version="0.1.0a1"
+    version="1.0.0"
 )
 
 origins = [

@@ -43,7 +43,7 @@ class DiscordOAuthRouter:
     client_id: str = ""
     client_secret: str = ""
     key: str = urandom(16).hex()
-    admins: list[int] = []
+    admins: list[str] = []
 
     def __init__(
         self,
@@ -52,7 +52,7 @@ class DiscordOAuthRouter:
         client_secret: str,
         key: str = urandom(16).hex(),
         prefix: str = "/oauth",
-        admins: list[int] = []
+        admins: list[str] = []
     ) -> None:
         self.router.prefix = prefix
 
@@ -158,7 +158,7 @@ class DiscordOAuthRouter:
         return JWT(access_token=jwt)
 
     @staticmethod
-    async def read_local_user(user_id: int, admins: list[int] = []) -> Optional[DisplayDiscordUser]:
+    async def read_local_user(user_id: str, admins: list[str] = []) -> Optional[DisplayDiscordUser]:
         user_file_path = join(DISCORD_USER_DIRECTORY, f"{user_id}.json")
         if not isfile(user_file_path):
             return None

@@ -11,12 +11,14 @@ import {
     useLocation,
 } from "react-router-dom";
 
-import dataContext from "../../context/data";
+import dataContext from "context/data";
 
 import "./index.scss";
 
 const navigate = {
-    "/": "首頁\nHome"
+    "/home": "首頁\nHome",
+    "/ticket": "Ticket 列表\nTicket List",
+    "/create": "新增 Ticket\nCreate Ticket",
 };
 
 export default function SideBar(): ReactElement | null {
@@ -68,7 +70,8 @@ export default function SideBar(): ReactElement | null {
                         key={i}
                         to={link}
                         className="link"
-                        data-select={location.pathname === link}
+                        data-select={location.pathname === link || location.pathname === `${link}/`}
+                        onClick={() => setOpen(false)}
                     >{name}</Link>)
                 }
 
@@ -95,7 +98,7 @@ export default function SideBar(): ReactElement | null {
 
                 {/* Logout Button */}
                 <button className="logoutButton" onClick={() => {
-                    localStorage.removeItem("access_token");
+                    localStorage.clear();
                     setNavigate("/login");
                 }}>
                     <span>Logout</span>

@@ -2,7 +2,7 @@ import {
     createContext,
 } from "react";
 
-import UserData from "../schemas/user";
+import UserData from "schemas/user";
 
 export interface Data {
     userData?: UserData

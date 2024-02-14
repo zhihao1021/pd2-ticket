@@ -6,7 +6,7 @@ from typing import Optional
 
 class Ticket(BaseModel):
     ticket_id: str
-    author_id: int
+    author_id: str
     create_utc_timestamp: float = Field(
         default_factory=datetime.utcnow().timestamp
     )

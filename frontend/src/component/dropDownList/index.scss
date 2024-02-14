@@ -1,0 +1,84 @@
+.dropDownList {
+    position: relative;
+    width: min-content;
+    height: 2.2em;
+    line-height: 1.6em;
+    border-radius: 0.5em;
+    user-select: none;
+    text-align: center;
+    z-index: 10;
+    
+    width: calc(1em * var(--width));
+    .container {
+        position: absolute;
+        top: 0;
+        left: 0;
+        border: 0.1rem solid var(--bar-bg-color);
+        border-radius: 0.5em;
+        width: calc(100% - 1.6em);
+        height: 1.6em;
+        max-height: calc((var(--display-rows) + 1) * 1.6rem);
+        padding: 0.2em 0.8em;
+        background-color: inherit;
+        overflow: hidden;
+        transition: height 0.3s, background-color 0.5s;
+        .selected {
+            height: 1.6em;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 0.5em;
+            color: var(--disable-color);
+            cursor: pointer;
+            transition: color 0.3s;
+            .context {
+                flex: 1;
+            }
+            .ms-o {
+                font-size: 1.2em;
+                width: 1em;
+                transform: rotate(90deg);
+                transition: transform 0.3s;
+            }
+        }
+        .selected:hover {
+            color: inherit;
+        }
+        .content {
+            position: absolute;
+            top: calc(1.8em);
+            width: calc(100% - 3.3em + min(0.2em, 0.25rem) * max(0, min(1, (var(--rows) - var(--display-rows)))));
+            max-height: calc((var(--display-rows)) * 1.6rem);
+            overflow-y: auto;
+            opacity: 0%;
+            transition: opacity 0.5s;
+            .value {
+                cursor: pointer;
+                transition: color 0.3s;
+            }
+        }
+        .content::-webkit-scrollbar {
+            width: 0.2em;
+            max-width: 0.25rem;
+        }
+    }
+}
+
+.dropDownList[data-open=true] {
+    .container {
+        height: calc((var(--rows) + 1) * 1.6em);
+        // background-color: var(--bar-bg-color);
+        .selected {
+            color: inherit;
+            .ms-o {
+                transform: rotate(0deg);
+            }
+        }
+        .content {
+            opacity: 100%;
+            .value:hover {
+                color: var(--select-color);
+            }
+        }
+    }
+}

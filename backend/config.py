@@ -11,7 +11,7 @@ class Config(BaseModel):
     redirect_uri: str = ""
     client_id: str = ""
     client_secret: str = ""
-    admins: list[int] = []
+    admins: list[str] = []
 
 
 try:

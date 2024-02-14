@@ -4,8 +4,7 @@
     left: 0;
     height: 100vh;
     width: 100vw;
-    background-color: var(--loading-bg-color);
-    z-index: 10;
+    background-color: var(--fixed-bg-color);
     user-select: none;
     transition: opacity 0.5s;
     .box {

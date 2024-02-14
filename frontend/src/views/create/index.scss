@@ -1,0 +1,132 @@
+#createPage {
+    .uploadBlock {
+        flex: 1;
+        padding: 1rem;
+        border: 0.1rem solid var(--color);
+        border-radius: 1rem;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        .uploadBox {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 0.25rem solid var(--disable-color);
+            border-radius: 0.5rem;
+            transition: border-color 0.3s;
+            cursor: pointer;
+            svg {
+                fill: var(--disable-color);
+                width: 16rem;
+                max-height: 80%;
+                max-width: 80%;
+                user-select: none;
+                transition: fill 0.3s;
+            }
+            input {
+                display: none;
+            }
+        }
+        .uploadBox[data-ondrag=true],
+        .uploadBox:hover {
+            border-color: var(--color);
+            svg {
+                fill: var(--color);
+            }
+        }
+
+        .uploadFiles {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 0.2rem;
+            h5 {
+                color: var(--sec-color);
+            }
+            pre {
+                flex: 1;
+                background-color: black;
+                overflow: auto;
+                margin: 0.5rem 0;
+                padding: 1rem;
+                border-radius: 1rem;
+                display: flex;
+                code {
+                    span {
+                        user-select: none;
+                        font-size: 1.15rem;
+                        display: block;
+                        height: 1.5rem;
+                        line-height: 1.5rem;
+                        width: fit-content;
+                        cursor: pointer;
+                    }
+                    span:hover {
+                        text-decoration: line-through;
+                    }
+                }
+            }
+
+            .toolBar {
+                display: flex;
+                gap: 0.8rem;
+                width: 100%;
+                align-items: center;
+                justify-content: center;
+                flex-wrap: wrap;
+                .search {
+                    flex: 1;
+                    min-width: 5rem;
+                    overflow: hidden;
+                    background-color: transparent;
+                    font-size: 1.2rem;
+                    height: 1.8rem;
+                    line-height: 1.8rem;
+                    border: none;
+                    border-bottom: 0.1rem solid var(--disable-color);
+                    color: var(--disable-color);
+                    outline: none;
+                    transition: color 0.3s, border-color 0.3s;
+                }
+                .search::placeholder {
+                    color: var(--disable-color);
+                    transition: color 0.3s;
+                }
+                .search:focus,
+                .search:focus::placeholder {
+                    color: var(--color);
+                    border-bottom-color: var(--color);
+                }
+                .buttons {
+                    flex: 1;
+                    display: flex;
+                    gap: 0.5rem;
+                    justify-content: space-between;
+                    align-items: center;
+                    isolation: isolate;
+                    width: 18rem;
+                    .dropDownList {
+                        flex: 2;
+                        background-color: var(--bg-color);
+                        min-width: 7rem;
+                    }
+                    button {
+                        flex: 1;
+                        height: 1.9rem;
+                        line-height: 1.9rem;
+                        padding: 0.1rem 1rem;
+                        border-radius: 0.5rem;
+                        // width: 5rem;
+                    }
+                    .cancel {
+                        background-color: var(--error-color);
+                    }
+                    .upload {
+                        background-color: var(--color-1);
+                    }
+                }
+            }
+        }
+    }
+}

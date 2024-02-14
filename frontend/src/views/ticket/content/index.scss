@@ -1,0 +1,270 @@
+#contentPage {
+    .infoBox {
+        position: relative;
+        padding: 0.75rem 1rem;
+        border: 0.1rem solid var(--sec-color);
+        border-radius: 1rem;
+        > .smallLoading {
+            position: absolute;
+            top: calc(50% - 4rem);
+            left: max(calc(50% - 12.5rem), 10%);
+            height: 8rem;
+            width: 25rem;
+            max-width: 80%;
+            margin: auto;
+        }
+        > .data {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.3rem 0.5rem;
+            justify-content: space-between;
+            > .column {
+                height: 2rem;
+                line-height: 2rem;
+                display: flex;
+                gap: 1rem;
+                .key {
+                    user-select: none;
+                }
+                .value {
+                    font-weight: 200;
+                    overflow: hidden;
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    user-select: all;
+                }
+                .value:has(img) {
+                    display: flex;
+                    gap: 0.5rem;
+                    align-items: center;
+                    img {
+                        user-select: none;
+                        height: 1.8rem;
+                        border-radius: 50%;
+                    }
+                }
+            }
+            > .column.full {
+                width: 100%;
+            }
+        }
+    }
+    .infoBox[data-show=false] {
+        > .smallLoading {
+            opacity: 100%;
+        }
+        > .data {
+            opacity: 0%;
+        }
+    }
+    .infoBox[data-show=true] {
+        > .smallLoading {
+            opacity: 0%;
+        }
+        > .data {
+            opacity: 100%;
+        }
+    }
+
+    .contentBox {
+        position: relative;
+        flex: 1;
+        padding: 0.75rem 1rem;
+        border: 0.1rem solid var(--sec-color);
+        border-radius: 1rem;
+        isolation: isolate;
+        > *[data-show=true] {
+            opacity: 100%;
+        }
+        > *[data-show=false] {
+            opacity: 0%;
+            pointer-events: none;
+        }
+
+        .fileList,
+        .fileContent {
+            position: absolute;
+            top: 0.75rem;
+            height: calc(100% - 1.5rem);
+            width: calc(100% - 2rem);
+            overflow: hidden;
+            transition: opacity 0.5s, width 0.5s;
+            h2 {
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 3.6rem;
+                width: calc(110vh - 13.5rem);
+                max-width: calc(100vw - (13.5rem + 5.2 * min(1rem, max(0rem, (40vw - 15rem) * 10000))));
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+            }
+
+            button.titleButton {
+                position: absolute;
+                left: min(
+                    calc(110vh - 9.8rem),
+                    calc(100vw - (9.8rem + 5.2 * min(1rem, max(0rem, (40vw - 15rem) * 10000))))
+                );
+                top: 0.9rem;
+                height: 1.8rem;
+                width: 5.5rem;
+                padding: 0.2rem 0.8rem;
+                border-radius: 0.5rem;
+                display: flex;
+                gap: 0.5rem;
+                color: var(--disable-color);
+                border: 0.1rem solid var(--disable-color);
+                justify-content: space-between;
+                align-items: center;
+                user-select: none;
+                transition: color 0.5s, border-color 0.5s;
+                > div:not(.ms-o) {
+                    flex: 1;
+                    text-align: center;
+                }
+            }
+            button.titleButton:hover {
+                color: var(--color);
+                border-color: var(--color);
+            }
+
+            .container {
+                position: absolute;
+                top: 3.6rem;
+                left: 0;
+                padding: 0.75rem;
+                width: calc(110vh - 5.7rem);
+                max-width: calc(100vw - (5.7rem + 5.2 * min(1rem, max(0rem, (40vw - 15rem) * 10000))));
+                overflow: auto;
+                margin: 0;
+                border-radius: 0.5rem;
+                height: calc(100% - 5.3rem);
+                background-color: #000;
+                color: #FFF;
+            }
+
+            pre.line {
+                display: flex;
+                > code {
+                    height: fit-content;
+                    span {
+                        display: block;
+                        height: 1.5rem;
+                        line-height: 1.5rem;
+                    }
+                }
+                code.line {
+                    position: sticky;
+                    left: 0;
+                    padding-right: 0.8rem;
+                    background-color: inherit;
+                    user-select: none;
+                }
+                code.line::before {
+                    content: "";
+                    position: absolute;
+                    left: -0.75rem;
+                    height: 100%;
+                    width: 0.75rem;
+                    background-color: inherit;
+                }
+            }
+
+            button.copy {
+                position: absolute;
+                top: 4rem;
+                left: calc(110vh - 6.2rem);
+                height: 1.6rem;
+                width: 1.6rem;
+                line-height: 1.6rem;
+                text-align: center;
+                border-radius: 0.25rem;
+                user-select: none;
+                color: var(--float-button-color);
+                background-color: var(--float-button-bg-color);
+                transition: background-color 0.3s;
+            }
+            button.copy:hover {
+                background-color: var(--float-button-hover-bg-color);
+            }
+            button.copy::before,
+            button.copy::after {
+                position: absolute;
+                top: 0;
+                left: 0;
+                height: 100%;
+                width: 100%;
+                font-family: "Material Symbols Outlined";
+                transition: transform 0.3s;
+            }
+            button.copy::before {
+                content: "file_copy";
+            }
+            button.copy::after {
+                content: "done_all";
+                font-size: 1.2rem;
+            }
+            button.copy[data-done=true]::before,
+            button.copy[data-done=false]::after {
+                transform: scale(0);
+            }
+            button.copy[data-done=false]::before,
+            button.copy[data-done=true]::after {
+                transform: scale(1);
+            }
+        }
+        .fileList[data-show=false],
+        .fileContent[data-show=false] {
+            width: 0;
+        }
+
+        .smallLoading {
+            position: absolute;
+            top: 0.75rem;
+            left: max(calc(50% - 12.5rem), 10%);
+            height: calc(100% - 1.5rem);
+            width: 25rem;
+            max-width: 80%;
+            margin: auto;
+        }
+        .fileList {
+            left: 1rem;
+            user-select: none;
+            .container {
+                font-size: 1.2rem;
+                code {
+                    display: flex;
+                    gap: 0.3em calc(50% - 1.5em * var(--length));
+                    flex-wrap: wrap;
+
+                    // justify-content: space-between;
+                    span {
+                        white-space: nowrap;
+                        height: 1.5em;
+                        line-height: 1.5em;
+                        flex: 1;
+                        min-width: calc(0.75rem * var(--length));
+                        a {
+                            color: inherit;
+                            margin: 0;
+                            width: fit-content;
+                            cursor: pointer;
+                            text-decoration: none;
+                        }
+                        a:hover {
+                            text-decoration: underline;
+                        }
+                    }
+                    span:last-child {
+                        margin-right: auto;
+                    }
+                }
+            }
+        }
+        .fileContent {
+            right: 1rem;
+        }
+    }
+}

@@ -13,7 +13,7 @@ class AccessTokenResponse(BaseModel):
 
 
 class DiscordUser(BaseModel):
-    id: int
+    id: str
     username: str
     global_name: Optional[str]
     avatar: Optional[str]

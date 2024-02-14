@@ -3,6 +3,7 @@ from fastapi import Depends
 from typing import Annotated
 
 from config import (
+    ADMINS,
     REDIRECT_URI,
     CLIENT_ID,
     CLIENT_SECRET,
@@ -14,7 +15,8 @@ discord_oauth_router = DiscordOAuthRouter(
     redirect_uri=REDIRECT_URI,
     client_id=CLIENT_ID,
     client_secret=CLIENT_SECRET,
-    key=KEY
+    key=KEY,
+    admins=ADMINS
 )
 
 user_depends = Depends(discord_oauth_router.valid_token)

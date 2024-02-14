@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, HTTPException, Response, status
 
 from discord_oauth import DiscordOAuthRouter, DisplayDiscordUser
 
@@ -16,11 +16,13 @@ router = APIRouter(
     status_code=status.HTTP_200_OK,
     description="Get user info by user ID"
 )
-async def get_user(user_id: int):
+async def get_user(user_id: int, response: Response):
     user = await DiscordOAuthRouter.read_local_user(user_id)
     if user is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="User not found"
         )
+    
+    response.headers["Cache-Control"] = "max-age=600"
     return user
