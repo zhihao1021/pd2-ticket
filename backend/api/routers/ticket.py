@@ -17,7 +17,6 @@ from config import KEY
 from schemas.ticket import Ticket, TicketUpdate
 
 from ..oauth import UserDepends
-from ..schemas import HTTPError
 
 router = APIRouter(
     prefix="/ticket",
@@ -224,15 +223,15 @@ async def get_user_ticket(
 ) -> Ticket:
     user_id = user.id if user_id == "@me" else str(user_id)
     target_directory = join(TICKET_DIRECTORY, user_id, ticket_id)
-    data_file_file = join(target_directory, "data.json")
-    if not isfile(data_file_file):
+    data_file_config = join(target_directory, "data.json")
+    if not isfile(data_file_config):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Config data not found"
         )
 
     # Read ticket config
-    async with async_open(data_file_file, "rb") as data_file:
+    async with async_open(data_file_config, "rb") as data_file:
         ticket_data = Ticket(**loads(
             await data_file.read()
         ))
@@ -260,15 +259,15 @@ async def get_user_ticket(
 ) -> str:
     user_id = user.id if user_id == "@me" else str(user_id)
     target_directory = join(TICKET_DIRECTORY, user_id, ticket_id)
-    data_file_file = join(target_directory, "data.json")
-    if not isfile(data_file_file):
+    data_file_config = join(target_directory, "data.json")
+    if not isfile(data_file_config):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Config data not found"
         )
 
     # Read ticket config
-    async with async_open(data_file_file, "rb") as data_file:
+    async with async_open(data_file_config, "rb") as data_file:
         ticket_data = Ticket(**loads(
             await data_file.read()
         ))
@@ -315,15 +314,15 @@ async def get_user_ticket(
 ):
     user_id = user.id if user_id == "@me" else str(user_id)
     target_directory = join(TICKET_DIRECTORY, user_id, ticket_id)
-    data_file_file = join(target_directory, "data.json")
-    if not isfile(data_file_file):
+    data_file_config = join(target_directory, "data.json")
+    if not isfile(data_file_config):
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
             detail="Config data not found"
         )
 
     # Read ticket config
-    async with async_open(data_file_file, "rb") as data_file:
+    async with async_open(data_file_config, "rb") as data_file:
         ticket_data = Ticket(**loads(
             await data_file.read()
         ))
