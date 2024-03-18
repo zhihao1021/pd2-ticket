@@ -37,7 +37,8 @@ export default function SideBar(): ReactElement | null {
     // Get API version
     useEffect(() => {
         axios.get("/version").then((response) => {
-            setVersion(`v${response.data}`);
+            const data: string = response.data;
+            setVersion(data.length < 50 ? `v${data}` : "API down");
         }).catch(() => {
             setVersion("API down")
         })

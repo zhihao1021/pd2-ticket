@@ -76,8 +76,8 @@ async def upload_files(
     filesize = sum(map(lambda file: file.size, accept_files))
     if filesize > 16 * 1024 * 1024:  # 16MB
         raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="File oversize"
+            status_code=status.HTTP_431_REQUEST_HEADER_FIELDS_TOO_LARGE,
+            detail="File oversize, max size is 16MB"
         )
 
     # Generate ticket id
